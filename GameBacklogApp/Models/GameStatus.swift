@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+enum GameStatus: String, Codable {
+    case backlog
+    case playing
+    case completed
+    case abandoned
+}

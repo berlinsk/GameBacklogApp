@@ -7,13 +7,6 @@
 
 import Foundation
 
-enum GameStatus: String, Codable {
-    case backlog
-    case playing
-    case completed
-    case abandoned
-}
-
 struct Game: Codable, Identifiable {
     let id: UUID
     var title: String

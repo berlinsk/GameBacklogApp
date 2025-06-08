@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct GameBacklogApp: App {
+    @StateObject var appState = AppState()
+
     var body: some Scene {
         WindowGroup {
-            GameListView()
+            if let _ = appState.token {
+                GameListView()
+                    .environmentObject(appState)
+            } else {
+                LoginView()
+                    .environmentObject(appState)
+            }
         }
     }
 }
