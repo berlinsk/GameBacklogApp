@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameListView: View {
     @StateObject private var viewModel = GameListViewModel()
+    @EnvironmentObject var appState: AppState
 
     @ViewBuilder
     var content: some View {
@@ -35,6 +36,14 @@ struct GameListView: View {
                 .navigationTitle("Мої ігри")
                 .onAppear { viewModel.loadGames() }
                 .refreshable { viewModel.loadGames() }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Logout") {
+                            appState.logout()
+                        }
+                    }
+                }
         }
+        .environmentObject(appState)
     }
 }
