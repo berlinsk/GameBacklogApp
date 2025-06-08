@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# SwiftPM
+.swiftpm/
+.build/
+Package.resolved
+
+# User data
+*.moved-aside
+*.xcuserdatad/
+*.xcworkspace/xcuserdata/
+
+# Archives
+*.xcarchive
+
+# Logs & temporary
+*.log
+*.tmp
+
+GameBacklogApp/Preview Content/

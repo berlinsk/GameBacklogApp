@@ -7,18 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C4F1A8622DF5969C00DA6B71 /* GameBacklogAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8612DF5969C00DA6B71 /* GameBacklogAppApp.swift */; };
-		C4F1A8642DF5969C00DA6B71 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8632DF5969C00DA6B71 /* ContentView.swift */; };
+		C4F1A8622DF5969C00DA6B71 /* GameBacklogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */; };
 		C4F1A8662DF596A100DA6B71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4F1A8652DF596A100DA6B71 /* Assets.xcassets */; };
 		C4F1A8692DF596A100DA6B71 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4F1A8682DF596A100DA6B71 /* Preview Assets.xcassets */; };
+		C4F1A8752DF597ED00DA6B71 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8742DF597ED00DA6B71 /* Game.swift */; };
+		C4F1A8772DF597FB00DA6B71 /* GameStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8762DF597FB00DA6B71 /* GameStatus.swift */; };
+		C4F1A8792DF5981D00DA6B71 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8782DF5981D00DA6B71 /* APIService.swift */; };
+		C4F1A87B2DF599CD00DA6B71 /* GameListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A87A2DF599CD00DA6B71 /* GameListViewModel.swift */; };
+		C4F1A87D2DF599DA00DA6B71 /* GameListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A87C2DF599DA00DA6B71 /* GameListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C4F1A85E2DF5969C00DA6B71 /* GameBacklogApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameBacklogApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C4F1A8612DF5969C00DA6B71 /* GameBacklogAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBacklogAppApp.swift; sourceTree = "<group>"; };
-		C4F1A8632DF5969C00DA6B71 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBacklogApp.swift; sourceTree = "<group>"; };
 		C4F1A8652DF596A100DA6B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4F1A8682DF596A100DA6B71 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C4F1A8742DF597ED00DA6B71 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		C4F1A8762DF597FB00DA6B71 /* GameStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatus.swift; sourceTree = "<group>"; };
+		C4F1A8782DF5981D00DA6B71 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		C4F1A87A2DF599CD00DA6B71 /* GameListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListViewModel.swift; sourceTree = "<group>"; };
+		C4F1A87C2DF599DA00DA6B71 /* GameListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +59,12 @@
 		C4F1A8602DF5969C00DA6B71 /* GameBacklogApp */ = {
 			isa = PBXGroup;
 			children = (
-				C4F1A8612DF5969C00DA6B71 /* GameBacklogAppApp.swift */,
-				C4F1A8632DF5969C00DA6B71 /* ContentView.swift */,
+				C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */,
+				C4F1A8732DF596FA00DA6B71 /* Helpers */,
+				C4F1A8722DF596F300DA6B71 /* ViewModels */,
+				C4F1A8712DF596E600DA6B71 /* Views */,
+				C4F1A8702DF596DE00DA6B71 /* Networking */,
+				C4F1A86F2DF596CD00DA6B71 /* Models */,
 				C4F1A8652DF596A100DA6B71 /* Assets.xcassets */,
 				C4F1A8672DF596A100DA6B71 /* Preview Content */,
 			);
@@ -65,6 +77,46 @@
 				C4F1A8682DF596A100DA6B71 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C4F1A86F2DF596CD00DA6B71 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C4F1A8742DF597ED00DA6B71 /* Game.swift */,
+				C4F1A8762DF597FB00DA6B71 /* GameStatus.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C4F1A8702DF596DE00DA6B71 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				C4F1A8782DF5981D00DA6B71 /* APIService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		C4F1A8712DF596E600DA6B71 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4F1A87C2DF599DA00DA6B71 /* GameListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C4F1A8722DF596F300DA6B71 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C4F1A87A2DF599CD00DA6B71 /* GameListViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C4F1A8732DF596FA00DA6B71 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +189,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4F1A8642DF5969C00DA6B71 /* ContentView.swift in Sources */,
-				C4F1A8622DF5969C00DA6B71 /* GameBacklogAppApp.swift in Sources */,
+				C4F1A87B2DF599CD00DA6B71 /* GameListViewModel.swift in Sources */,
+				C4F1A8622DF5969C00DA6B71 /* GameBacklogApp.swift in Sources */,
+				C4F1A87D2DF599DA00DA6B71 /* GameListView.swift in Sources */,
+				C4F1A8772DF597FB00DA6B71 /* GameStatus.swift in Sources */,
+				C4F1A8792DF5981D00DA6B71 /* APIService.swift in Sources */,
+				C4F1A8752DF597ED00DA6B71 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
