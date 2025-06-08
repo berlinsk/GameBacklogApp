@@ -13,22 +13,24 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 *.xcscmblueprint
+*.xcarchive
+*.xcuserdatad/
+*.xcworkspace/xcuserdata/
 
 # SwiftPM
 .swiftpm/
 .build/
 Package.resolved
 
-# User data
-*.moved-aside
-*.xcuserdatad/
-*.xcworkspace/xcuserdata/
-
-# Archives
-*.xcarchive
-
-# Logs & temporary
+# Logs & temp
 *.log
 *.tmp
+*.moved-aside
+
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+.vscode/
 
 GameBacklogApp/Preview Content/

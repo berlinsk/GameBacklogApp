@@ -17,12 +17,14 @@ class GameListViewModel: ObservableObject {
         errorMessage = nil
 
         APIService.shared.fetchGames { [weak self] result in
-            self?.isLoading = false
-            switch result {
-            case .success(let games):
-                self?.games = games
-            case .failure(let error):
-                self?.errorMessage = error.localizedDescription
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let games):
+                    self?.games = games
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                }
             }
         }
     }

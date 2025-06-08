@@ -18,7 +18,7 @@ struct Game: Codable, Identifiable {
     let id: UUID
     var title: String
     var platform: String
-    var coverURL: String
+    var coverURL: String?
     var status: GameStatus
     var rating: Int
     var notes: String

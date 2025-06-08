@@ -11,7 +11,7 @@ class APIService {
     static let shared = APIService()
     private init() {}
 
-    let baseURL = URL(string: "http://172.20.10.3")!
+    let baseURL = URL(string: "http://172.20.10.3:8080")!
     let token = "TED4Mm2kpDXJljpC3ZgIuw=="
 
     func fetchGames(completion: @escaping (Result<[Game], Error>) -> Void) {
@@ -19,6 +19,10 @@ class APIService {
         var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        print("📡 FINAL URL: \(request.url?.absoluteString ?? "-")")
+        print("📦 HEADERS: \(request.allHTTPHeaderFields ?? [:])")
+
 
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {

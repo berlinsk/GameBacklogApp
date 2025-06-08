@@ -27,6 +27,7 @@
 		C4F1A8782DF5981D00DA6B71 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		C4F1A87A2DF599CD00DA6B71 /* GameListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListViewModel.swift; sourceTree = "<group>"; };
 		C4F1A87C2DF599DA00DA6B71 /* GameListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListView.swift; sourceTree = "<group>"; };
+		C4F1A87E2DF5B2D400DA6B71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +44,7 @@
 		C4F1A8552DF5969C00DA6B71 = {
 			isa = PBXGroup;
 			children = (
+				C4F1A87E2DF5B2D400DA6B71 /* Info.plist */,
 				C4F1A8602DF5969C00DA6B71 /* GameBacklogApp */,
 				C4F1A85F2DF5969C00DA6B71 /* Products */,
 			);
