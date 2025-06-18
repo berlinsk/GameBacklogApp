@@ -10,6 +10,7 @@ import SwiftUI
 struct GameListView: View {
     @StateObject private var viewModel = GameListViewModel()
     @EnvironmentObject var appState: AppState
+    @State private var selectedGame: Game?
 
     @ViewBuilder
     var content: some View {
@@ -25,7 +26,7 @@ struct GameListView: View {
                     Text(game.platform).font(.subheadline)
                     Text("Жанри: \(game.genres.joined(separator: ", "))").font(.caption)
                     Text("Статус: \(game.status.rawValue.capitalized), Оцінка: \(game.rating)/10").font(.caption)
-                }
+                }.onTapGesture { selectedGame = game }
             }
         }
     }
@@ -40,6 +41,13 @@ struct GameListView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Logout") {
                             appState.logout()
+                        }
+                    }
+                }
+                .sheet(item: $selectedGame) { game in
+                    NavigationStack {
+                        EditGameView(game: game) { updated in
+                            viewModel.save(game: updated)
                         }
                     }
                 }

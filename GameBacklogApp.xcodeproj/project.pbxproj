@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C41C7D922E0361C20092337B /* EditGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7D912E0361C20092337B /* EditGameView.swift */; };
 		C4F1A8622DF5969C00DA6B71 /* GameBacklogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */; };
 		C4F1A8662DF596A100DA6B71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4F1A8652DF596A100DA6B71 /* Assets.xcassets */; };
 		C4F1A8692DF596A100DA6B71 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4F1A8682DF596A100DA6B71 /* Preview Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C41C7D912E0361C20092337B /* EditGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGameView.swift; sourceTree = "<group>"; };
 		C4F1A85E2DF5969C00DA6B71 /* GameBacklogApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameBacklogApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBacklogApp.swift; sourceTree = "<group>"; };
 		C4F1A8652DF596A100DA6B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				C4F1A8802DF5D37700DA6B71 /* LoginView.swift */,
+				C41C7D912E0361C20092337B /* EditGameView.swift */,
 				C4F1A87C2DF599DA00DA6B71 /* GameListView.swift */,
 			);
 			path = Views;
@@ -204,6 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4F1A87B2DF599CD00DA6B71 /* GameListViewModel.swift in Sources */,
+				C41C7D922E0361C20092337B /* EditGameView.swift in Sources */,
 				C4F1A8812DF5D37700DA6B71 /* LoginView.swift in Sources */,
 				C4F1A8622DF5969C00DA6B71 /* GameBacklogApp.swift in Sources */,
 				C4F1A8852DF5D4A100DA6B71 /* AppState.swift in Sources */,

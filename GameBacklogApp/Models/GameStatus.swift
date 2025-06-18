@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum GameStatus: String, Codable {
+enum GameStatus: String, Codable, CaseIterable {
     case backlog
     case playing
     case completed

@@ -28,4 +28,21 @@ class GameListViewModel: ObservableObject {
             }
         }
     }
+    
+    func save(game: Game) {
+        isLoading = true
+        APIService.shared.updateGame(game) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let updated):
+                    if let index = self?.games.firstIndex(where: { $0.id == updated.id }) {
+                        self?.games[index] = updated
+                    }
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
 }
