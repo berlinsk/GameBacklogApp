@@ -72,6 +72,30 @@ class APIService {
         }.resume()
     }
     
+    func register(username: String, password: String, completion: @escaping (Result<String,Error>) -> Void) {
+
+        let url = baseURL.appendingPathComponent("register")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        struct Body: Codable { let username: String; let password: String }
+        request.httpBody = try? JSONEncoder().encode(Body(username: username, password: password))
+
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error { completion(.failure(error)); return }
+            guard let data = data else {
+                completion(.failure(NSError(domain: "NoData", code: -1))); return
+            }
+            do {
+                let decoded = try JSONDecoder().decode(LoginResponse.self, from: data)
+                completion(.success(decoded.token))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
     func createGame(_ game: Game, completion: @escaping (Result<Game, Error>) -> Void) {
         guard let token = UserDefaults.standard.string(forKey: "authToken") else {
             completion(.failure(NSError(domain: "NoToken", code: 401)))

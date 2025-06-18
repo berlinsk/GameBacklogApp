@@ -15,9 +15,9 @@ struct GameListView: View {
     @ViewBuilder
     var content: some View {
         if viewModel.isLoading {
-            ProgressView("Завантаження...")
+            ProgressView("Loading...")
         } else if let error = viewModel.errorMessage {
-            Text("Помилка: \(error)")
+            Text("Ooops: \(error)")
                 .foregroundColor(.red)
         } else {
             List {
@@ -25,8 +25,8 @@ struct GameListView: View {
                     VStack(alignment: .leading) {
                         Text(game.title).font(.headline)
                         Text(game.platform).font(.subheadline)
-                        Text("Жанри: \(game.genres.joined(separator: ", "))").font(.caption)
-                        Text("Статус: \(game.status.rawValue.capitalized), Оцінка: \(game.rating)/10").font(.caption)
+                        Text("Genres: \(game.genres.joined(separator: ", "))").font(.caption)
+                        Text("Status: \(game.status.rawValue.capitalized), Rating: \(game.rating)/10").font(.caption)
                     }.onTapGesture { selectedGame = game }
                 }.onDelete(perform: viewModel.delete)
             }
@@ -36,7 +36,7 @@ struct GameListView: View {
     var body: some View {
         NavigationView {
             content
-                .navigationTitle("Мої ігри")
+                .navigationTitle("My games")
                 .onAppear { viewModel.loadGames() }
                 .refreshable { viewModel.loadGames() }
                 .toolbar {

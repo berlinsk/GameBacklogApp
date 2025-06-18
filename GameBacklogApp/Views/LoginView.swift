@@ -13,17 +13,23 @@ struct LoginView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            TextField("Логін", text: $viewModel.username)
+            Picker("Mode", selection: $viewModel.mode) {
+                Text("Login").tag(AuthMode.login)
+                Text("Register").tag(AuthMode.register)
+            }
+            .pickerStyle(.segmented)
+            
+            TextField("Login", text: $viewModel.username)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            SecureField("Пароль", text: $viewModel.password)
+            SecureField("Password", text: $viewModel.password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
             if let error = viewModel.errorMessage {
                 Text(error).foregroundColor(.red)
             }
 
-            Button("Увійти") {
-                viewModel.login { token in
+            Button(viewModel.mode == .login ? "Enter" : "Register") {
+                viewModel.submit { token in
                     if let token = token {
                         appState.token = token
                     }
@@ -36,6 +42,6 @@ struct LoginView: View {
             }
         }
         .padding()
-        .navigationTitle("Авторизація")
+        .navigationTitle(viewModel.mode == .login ? "Authorization" : "Registration")
     }
 }
