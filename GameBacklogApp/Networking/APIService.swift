@@ -72,6 +72,55 @@ class APIService {
         }.resume()
     }
     
+    func createGame(_ game: Game, completion: @escaping (Result<Game, Error>) -> Void) {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+            completion(.failure(NSError(domain: "NoToken", code: 401)))
+            return
+        }
+
+        var request = URLRequest(url: baseURL.appendingPathComponent("games"))
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        struct CreatePayload: Codable {
+            let title: String
+            let genres: [String]
+            let platform: String
+            let coverURL: String?
+            let status: GameStatus
+            let rating: Int?
+            let notes: String?
+        }
+
+        let payload = CreatePayload(
+            title: game.title,
+            genres: game.genres,
+            platform: game.platform,
+            coverURL: game.coverURL,
+            status: game.status,
+            rating: game.rating,
+            notes: game.notes
+        )
+
+        request.httpBody = try? JSONEncoder().encode(payload)
+
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                completion(.failure(error)); return
+            }
+            guard let data = data else {
+                completion(.failure(NSError(domain: "NoData", code: -1))); return
+            }
+            do {
+                let created = try JSONDecoder().decode(Game.self, from: data)
+                completion(.success(created))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
     func updateGame(_ game: Game, completion: @escaping (Result<Game,Error>) -> Void) {
         guard let token = UserDefaults.standard.string(forKey: "authToken") else {
             completion(.failure(NSError(domain: "NoToken", code: 401)))
@@ -108,6 +157,30 @@ class APIService {
                 completion(.success(updated))
             } catch {
                 completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    func deleteGame(_ id: UUID, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let token = UserDefaults.standard.string(forKey: "authToken") else {
+            completion(.failure(NSError(domain: "NoToken", code: 401)))
+            return
+        }
+
+        var request = URLRequest(url: baseURL.appendingPathComponent("games/\(id.uuidString)"))
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { _, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 204 {
+                completion(.success(()))
+            } else {
+                completion(.failure(NSError(domain: "DeleteFailed", code: -1)))
             }
         }.resume()
     }

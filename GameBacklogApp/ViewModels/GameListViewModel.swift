@@ -11,6 +11,21 @@ class GameListViewModel: ObservableObject {
     @Published var games: [Game] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    
+    func add(game: Game) {
+        isLoading = true
+        APIService.shared.createGame(game) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let newGame):
+                    self?.games.append(newGame)
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
 
     func loadGames() {
         isLoading = true
@@ -41,6 +56,22 @@ class GameListViewModel: ObservableObject {
                     }
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        for index in offsets {
+            let game = games[index]
+            APIService.shared.deleteGame(game.id) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self?.games.remove(at: index)
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                    }
                 }
             }
         }

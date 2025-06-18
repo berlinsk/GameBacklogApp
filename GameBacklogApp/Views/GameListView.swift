@@ -20,13 +20,15 @@ struct GameListView: View {
             Text("Помилка: \(error)")
                 .foregroundColor(.red)
         } else {
-            List(viewModel.games) { game in
-                VStack(alignment: .leading) {
-                    Text(game.title).font(.headline)
-                    Text(game.platform).font(.subheadline)
-                    Text("Жанри: \(game.genres.joined(separator: ", "))").font(.caption)
-                    Text("Статус: \(game.status.rawValue.capitalized), Оцінка: \(game.rating)/10").font(.caption)
-                }.onTapGesture { selectedGame = game }
+            List {
+                ForEach(viewModel.games) { game in
+                    VStack(alignment: .leading) {
+                        Text(game.title).font(.headline)
+                        Text(game.platform).font(.subheadline)
+                        Text("Жанри: \(game.genres.joined(separator: ", "))").font(.caption)
+                        Text("Статус: \(game.status.rawValue.capitalized), Оцінка: \(game.rating)/10").font(.caption)
+                    }.onTapGesture { selectedGame = game }
+                }.onDelete(perform: viewModel.delete)
             }
         }
     }
@@ -43,11 +45,26 @@ struct GameListView: View {
                             appState.logout()
                         }
                     }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            selectedGame = Game(
+                                id: UUID(), title: "", platform: "", coverURL: nil,
+                                status: .backlog, rating: 0, notes: "", genres: [],
+                                createdAt: ISO8601DateFormatter().string(from: Date())
+                            )
+                        }) {
+                            Image(systemName: "plus")
+                        }
+                    }
                 }
                 .sheet(item: $selectedGame) { game in
                     NavigationStack {
-                        EditGameView(game: game) { updated in
-                            viewModel.save(game: updated)
+                        EditGameView(game: game) { edited in
+                            if viewModel.games.contains(where: { $0.id == edited.id }) {
+                                viewModel.save(game: edited)
+                            } else {
+                                viewModel.add(game: edited)
+                            }
                         }
                     }
                 }
