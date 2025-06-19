@@ -6,12 +6,19 @@
 //
 
 import Foundation
+import Combine
 
 class GameListViewModel: ObservableObject {
     @Published var games: [Game] = []
     @Published var query = APIService.GameQuery()
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var searchText = ""
+    
+    var filteredGames: [Game] {
+        guard !searchText.isEmpty else { return games }
+        return games.filter { $0.matches(searchText) }
+    }
     
     func add(game: Game) {
         isLoading = true

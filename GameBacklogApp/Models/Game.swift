@@ -17,4 +17,11 @@ struct Game: Codable, Identifiable, Hashable {
     var notes: String
     var genres: [String]
     var createdAt: String
+    
+    func matches(_ query: String) -> Bool {
+        let q = query.lowercased()
+        let t = title.lowercased()
+        if t.contains(q) { return true }
+        return t.similarity(to: q) >= 0.75
+    }
 }

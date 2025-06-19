@@ -22,7 +22,7 @@ struct GameListView: View {
                 .foregroundColor(.red)
         } else {
             List {
-                ForEach(viewModel.games) { game in
+                ForEach(viewModel.filteredGames) { game in
                     HStack(alignment: .top, spacing: 12) {
                         if let urlString = game.coverURL,
                            let url = URL(string: urlString) {
@@ -133,6 +133,7 @@ struct GameListView: View {
                 }
         }
         .environmentObject(appState)
+        .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search games")
     }
     
     private var sortAndFilterMenu: some View {
