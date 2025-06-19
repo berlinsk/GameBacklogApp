@@ -12,28 +12,45 @@ class APIService {
     private init() {}
 
     let baseURL = URL(string: "http://172.20.10.10:8080")!
+    
+    struct GameQuery {
+        var status: GameStatus? = nil
+        var platform: String? = nil
+        var minRating: Int? = nil
+        var maxRating: Int? = nil
+        var search: String? = nil
+        var genres: [String] = []
+        var sortBy: String = "createdAt"
+        var order: String  = "desc"
+    }
 
-    func fetchGames(completion: @escaping (Result<[Game], Error>) -> Void) {
+    func fetchGames(
+        query: GameQuery = GameQuery(),
+        completion: @escaping (Result<[Game],Error>) -> Void
+    ) {
         guard let token = UserDefaults.standard.string(forKey: "authToken") else {
-            completion(.failure(NSError(domain: "NoToken", code: 401)))
-            return
+            completion(.failure(NSError(domain: "NoToken", code: 401))); return
         }
 
-        var request = URLRequest(url: baseURL.appendingPathComponent("games"))
+        var comps = URLComponents(url: baseURL.appendingPathComponent("games"), resolvingAgainstBaseURL: false)!
+        comps.queryItems = [
+            query.status.map { URLQueryItem(name: "status", value: $0.rawValue) },
+            query.platform.map { URLQueryItem(name: "platform", value: $0) },
+            query.minRating.map { URLQueryItem(name: "minRating", value: String($0)) },
+            query.maxRating.map { URLQueryItem(name: "maxRating", value: String($0)) },
+            query.search.map    { URLQueryItem(name: "search",    value: $0) },
+            query.genres.isEmpty ? nil : URLQueryItem(name: "genre", value: query.genres.joined(separator: ",")),
+            URLQueryItem(name: "sortBy", value: query.sortBy),
+            URLQueryItem(name: "order",  value: query.order)
+        ].compactMap { $0 }
+
+        var request = URLRequest(url: comps.url!)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
-        URLSession.shared.dataTask(with: request) { data, _, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            guard let data = data else {
-                completion(.failure(NSError(domain: "NoData", code: -1)))
-                return
-            }
-
+        URLSession.shared.dataTask(with: request) { data,_,error in
+            if let error = error { completion(.failure(error)); return }
+            guard let data = data else { completion(.failure(NSError(domain:"NoData",code:-1))); return }
             do {
                 let decoded = try JSONDecoder().decode(GameListResponse.self, from: data)
                 completion(.success(decoded.games))

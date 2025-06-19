@@ -9,6 +9,7 @@ import Foundation
 
 class GameListViewModel: ObservableObject {
     @Published var games: [Game] = []
+    @Published var query = APIService.GameQuery()
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -31,7 +32,7 @@ class GameListViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
 
-        APIService.shared.fetchGames { [weak self] result in
+        APIService.shared.fetchGames(query: query) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 switch result {

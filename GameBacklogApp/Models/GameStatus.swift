@@ -7,9 +7,11 @@
 
 import Foundation
 
-enum GameStatus: String, Codable, CaseIterable {
+enum GameStatus: String, Codable, CaseIterable, Identifiable {
     case backlog
     case playing
     case completed
     case abandoned
+    
+    var id: String { self.rawValue }
 }

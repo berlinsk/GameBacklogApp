@@ -103,6 +103,9 @@ struct GameListView: View {
                             Image(systemName: "plus")
                         }
                     }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        sortAndFilterMenu
+                    }
                 }
                 .sheet(item: $editingGame) { game in
                     NavigationStack {
@@ -130,5 +133,38 @@ struct GameListView: View {
                 }
         }
         .environmentObject(appState)
+    }
+    
+    private var sortAndFilterMenu: some View {
+        Menu {
+            Picker("Sort by", selection: $viewModel.query.sortBy) {
+                Text("Created").tag("createdAt")
+                Text("Title").tag("title")
+                Text("Platform").tag("platform")
+                Text("Rating").tag("rating")
+            }
+
+            Picker("Order", selection: $viewModel.query.order) {
+                Text("Desc").tag("desc")
+                Text("Asc").tag("asc")
+            }
+
+            Picker("Status", selection: Binding(
+                get: { viewModel.query.status ?? .backlog },
+                set: { new in
+                    viewModel.query.status = (new == .backlog ? nil : new)
+                    viewModel.loadGames()
+                })) {
+                Text("All").tag(GameStatus.backlog)
+                ForEach(GameStatus.allCases) { s in
+                    if s != .backlog {
+                        Text(s.rawValue.capitalized).tag(s)
+                    }
+                }
+            }
+
+        } label: {
+            Image(systemName: "arrow.up.arrow.down.square")
+        }
     }
 }
