@@ -22,12 +22,44 @@ struct GameListView: View {
         } else {
             List {
                 ForEach(viewModel.games) { game in
-                    VStack(alignment: .leading) {
-                        Text(game.title).font(.headline)
-                        Text(game.platform).font(.subheadline)
-                        Text("Genres: \(game.genres.joined(separator: ", "))").font(.caption)
-                        Text("Status: \(game.status.rawValue.capitalized), Rating: \(game.rating)/10").font(.caption)
-                    }.onTapGesture { selectedGame = game }
+                    HStack(alignment: .top, spacing: 12) {
+                        if let urlString = game.coverURL,
+                           let url = URL(string: urlString) {
+                            AsyncImage(url: url) { phase in
+                                switch phase {
+                                case .empty:
+                                    ProgressView()
+                                        .frame(width: 60, height: 60)
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 60, height: 60)
+                                        .clipped()
+                                        .cornerRadius(8)
+                                case .failure:
+                                    Color.gray
+                                        .frame(width: 60, height: 60)
+                                        .cornerRadius(8)
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
+                        } else {
+                            Color.gray
+                                .frame(width: 60, height: 60)
+                                .cornerRadius(8)
+                        }
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(game.title).font(.headline)
+                            Text(game.platform).font(.subheadline)
+                            Text("Genres: \(game.genres.joined(separator: ", "))").font(.caption)
+                            Text("Status: \(game.status.rawValue.capitalized), Rating: \(game.rating)/10").font(.caption)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    .onTapGesture { selectedGame = game }
                 }.onDelete(perform: viewModel.delete)
             }
         }
