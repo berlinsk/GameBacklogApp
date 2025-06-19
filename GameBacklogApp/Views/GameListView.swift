@@ -10,7 +10,8 @@ import SwiftUI
 struct GameListView: View {
     @StateObject private var viewModel = GameListViewModel()
     @EnvironmentObject var appState: AppState
-    @State private var selectedGame: Game?
+    @State private var detailGame: Game?
+    @State private var editingGame: Game?
 
     @ViewBuilder
     var content: some View {
@@ -59,14 +60,28 @@ struct GameListView: View {
                         }
                     }
                     .padding(.vertical, 4)
-                    .onTapGesture { selectedGame = game }
+                    .contentShape(Rectangle())
+                    .onTapGesture { detailGame = game }
+                    .swipeActions(edge: .trailing) {
+                        Button {
+                            editingGame = game
+                        } label: {
+                            Label("Edit", systemImage: "pencil")
+                        }.tint(.blue)
+
+                        Button(role: .destructive) {
+                            viewModel.delete(game: game)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }.onDelete(perform: viewModel.delete)
             }
         }
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             content
                 .navigationTitle("My games")
                 .onAppear { viewModel.loadGames() }
@@ -79,7 +94,7 @@ struct GameListView: View {
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
-                            selectedGame = Game(
+                            editingGame = Game(
                                 id: UUID(), title: "", platform: "", coverURL: nil,
                                 status: .backlog, rating: 0, notes: "", genres: [],
                                 createdAt: ISO8601DateFormatter().string(from: Date())
@@ -89,7 +104,7 @@ struct GameListView: View {
                         }
                     }
                 }
-                .sheet(item: $selectedGame) { game in
+                .sheet(item: $editingGame) { game in
                     NavigationStack {
                         EditGameView(game: game) { edited in
                             if viewModel.games.contains(where: { $0.id == edited.id }) {
@@ -98,6 +113,11 @@ struct GameListView: View {
                                 viewModel.add(game: edited)
                             }
                         }
+                    }
+                }
+                .navigationDestination(item: $detailGame) { game in
+                    GameDetailView(game: game) { toEdit in
+                        editingGame = toEdit
                     }
                 }
         }

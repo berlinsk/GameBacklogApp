@@ -64,14 +64,18 @@ class GameListViewModel: ObservableObject {
     func delete(at offsets: IndexSet) {
         for index in offsets {
             let game = games[index]
-            APIService.shared.deleteGame(game.id) { [weak self] result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self?.games.remove(at: index)
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                    }
+            delete(game: game)
+        }
+    }
+
+    func delete(game: Game) {
+        APIService.shared.deleteGame(game.id) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.games.removeAll { $0.id == game.id }
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
                 }
             }
         }
