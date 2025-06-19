@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct GameDetailView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State var game: Game
+    @Binding var game: Game
     let onEdit: (Game) -> Void
 
     var body: some View {

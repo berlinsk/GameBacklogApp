@@ -116,8 +116,16 @@ struct GameListView: View {
                     }
                 }
                 .navigationDestination(item: $detailGame) { game in
-                    GameDetailView(game: game) { toEdit in
-                        editingGame = toEdit
+                    if let idx = viewModel.games.firstIndex(where: { $0.id == game.id }) {
+                        GameDetailView(
+                            game: $viewModel.games[idx],
+                            onEdit: { toEdit in editingGame = toEdit }
+                        )
+                    } else {
+                        GameDetailView(
+                            game: .constant(game),
+                            onEdit: { toEdit in editingGame = toEdit }
+                        )
                     }
                 }
         }
