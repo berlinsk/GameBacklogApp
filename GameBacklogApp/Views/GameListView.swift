@@ -22,7 +22,7 @@ struct GameListView: View {
                 .foregroundColor(.red)
         } else {
             List {
-                ForEach(viewModel.filteredGames) { game in
+                ForEach(viewModel.games) { game in
                     HStack(alignment: .top, spacing: 12) {
                         if let urlString = game.coverURL,
                            let url = URL(string: urlString) {

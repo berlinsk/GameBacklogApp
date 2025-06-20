@@ -15,9 +15,16 @@ class GameListViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var searchText = ""
     
-    var filteredGames: [Game] {
-        guard !searchText.isEmpty else { return games }
-        return games.filter { $0.matches(searchText) }
+    private var cancellable: AnyCancellable?
+
+    init() {
+        cancellable = $searchText
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] text in
+                self?.query.search = text.isEmpty ? nil : text
+                self?.loadGames()
+            }
     }
     
     func add(game: Game) {
