@@ -22,12 +22,12 @@ class APIService {
         var genres: [String] = []
         var sortBy: String = "createdAt"
         var order: String  = "desc"
+        var limit:  Int = 10
+        var offset: Int = 0
     }
 
-    func fetchGames(
-        query: GameQuery = GameQuery(),
-        completion: @escaping (Result<[Game],Error>) -> Void
-    ) {
+    func fetchGames(query: GameQuery = GameQuery(),
+                    completion: @escaping (Result<GameListResponse,Error>) -> Void) {
         guard let token = UserDefaults.standard.string(forKey: "authToken") else {
             completion(.failure(NSError(domain: "NoToken", code: 401))); return
         }
@@ -41,7 +41,9 @@ class APIService {
             query.search.map    { URLQueryItem(name: "search",    value: $0) },
             query.genres.isEmpty ? nil : URLQueryItem(name: "genre", value: query.genres.joined(separator: ",")),
             URLQueryItem(name: "sortBy", value: query.sortBy),
-            URLQueryItem(name: "order",  value: query.order)
+            URLQueryItem(name: "order",  value: query.order),
+            URLQueryItem(name: "limit",  value: String(query.limit)),
+            URLQueryItem(name: "offset", value: String(query.offset)),
         ].compactMap { $0 }
 
         var request = URLRequest(url: comps.url!)
@@ -53,7 +55,7 @@ class APIService {
             guard let data = data else { completion(.failure(NSError(domain:"NoData",code:-1))); return }
             do {
                 let decoded = try JSONDecoder().decode(GameListResponse.self, from: data)
-                completion(.success(decoded.games))
+                completion(.success(decoded))
             } catch {
                 completion(.failure(error))
             }

@@ -14,7 +14,9 @@ class GameListViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var searchText = ""
+    @Published var total: Int = 0 // number of games
     
+    private var page = 10 // page size
     private var cancellable: AnyCancellable?
 
     init() {
@@ -42,21 +44,39 @@ class GameListViewModel: ObservableObject {
         }
     }
 
-    func loadGames() {
+    func loadGames(reset: Bool = true) {
+        if reset {
+            query.offset = 0
+            games.removeAll()
+        }
+        query.limit = page
         isLoading = true
         errorMessage = nil
 
         APIService.shared.fetchGames(query: query) { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                guard let self = self else { return }
+                self.isLoading = false
                 switch result {
-                case .success(let games):
-                    self?.games = games
+                case .success(let response):
+                    let fetched = response.games
+                    if reset {
+                        self.games = fetched
+                    } else {
+                        self.games.append(contentsOf: fetched)
+                    }
+                    self.total = response.total
                 case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
+                    self.errorMessage = error.localizedDescription
                 }
             }
         }
+    }
+    
+    func loadMore(current game: Game) {
+        guard !isLoading, games.last == game, games.count < total else { return }
+        query.offset += page
+        loadGames(reset: false)
     }
     
     func save(game: Game) {

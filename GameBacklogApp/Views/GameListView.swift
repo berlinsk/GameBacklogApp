@@ -75,6 +75,7 @@ struct GameListView: View {
                             Label("Delete", systemImage: "trash")
                         }
                     }
+                    .onAppear { viewModel.loadMore(current: game) }
                 }.onDelete(perform: viewModel.delete)
             }
         }
@@ -83,7 +84,7 @@ struct GameListView: View {
     var body: some View {
         NavigationStack {
             content
-                .navigationTitle("My games")
+                .navigationTitle("My games(\(viewModel.games.count)/\(viewModel.total))")
                 .onAppear { viewModel.loadGames() }
                 .refreshable { viewModel.loadGames() }
                 .toolbar {
