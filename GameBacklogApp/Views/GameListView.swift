@@ -15,12 +15,7 @@ struct GameListView: View {
 
     @ViewBuilder
     var content: some View {
-        if viewModel.isLoading {
-            ProgressView("Loading...")
-        } else if let error = viewModel.errorMessage {
-            Text("Ooops: \(error)")
-                .foregroundColor(.red)
-        } else {
+        ZStack {
             List {
                 ForEach(viewModel.games) { game in
                     HStack(alignment: .top, spacing: 12) {
@@ -29,33 +24,28 @@ struct GameListView: View {
                             AsyncImage(url: url) { phase in
                                 switch phase {
                                 case .empty:
-                                    ProgressView()
-                                        .frame(width: 60, height: 60)
+                                    ProgressView().frame(width: 60, height: 60)
                                 case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 60, height: 60)
-                                        .clipped()
-                                        .cornerRadius(8)
-                                case .failure:
-                                    Color.gray
-                                        .frame(width: 60, height: 60)
-                                        .cornerRadius(8)
-                                @unknown default:
-                                    EmptyView()
+                                    image.resizable()
+                                         .scaledToFill()
+                                         .frame(width: 60, height: 60)
+                                         .clipped()
+                                         .cornerRadius(8)
+                                default:
+                                    Color.gray.frame(width: 60, height: 60)
+                                             .cornerRadius(8)
                                 }
                             }
                         } else {
-                            Color.gray
-                                .frame(width: 60, height: 60)
-                                .cornerRadius(8)
+                            Color.gray.frame(width: 60, height: 60)
+                                      .cornerRadius(8)
                         }
 
                         VStack(alignment: .leading, spacing: 4) {
                             Text(game.title).font(.headline)
                             Text(game.platform).font(.subheadline)
-                            Text("Genres: \(game.genres.joined(separator: ", "))").font(.caption)
+                            Text("Genres: \(game.genres.joined(separator: ", "))")
+                                .font(.caption)
                             Text("Status: \(game.status.rawValue.capitalized), Rating: \(game.rating)/10").font(.caption)
                         }
                     }
@@ -63,9 +53,7 @@ struct GameListView: View {
                     .contentShape(Rectangle())
                     .onTapGesture { detailGame = game }
                     .swipeActions(edge: .trailing) {
-                        Button {
-                            editingGame = game
-                        } label: {
+                        Button { editingGame = game } label: {
                             Label("Edit", systemImage: "pencil")
                         }.tint(.blue)
 
@@ -75,11 +63,28 @@ struct GameListView: View {
                             Label("Delete", systemImage: "trash")
                         }
                     }
-                    .onAppear { viewModel.loadMore(current: game) }
-                }.onDelete(perform: viewModel.delete)
+                    .onAppear { viewModel.loadMore(current: game) }   // pagination
+                }
+                .onDelete(perform: viewModel.delete)
+            }
+            .animation(nil, value: viewModel.games)   // pagination without animation
+
+            // spinner
+            if viewModel.isLoading {
+                ProgressView("Loading…")
+                    .padding()
+                    .background(.regularMaterial)
+                    .cornerRadius(12)
+            }
+
+            if let error = viewModel.errorMessage {
+                Text("Ooops: \(error)")
+                    .foregroundColor(.red)
+                    .padding()
             }
         }
     }
+
 
     var body: some View {
         NavigationStack {

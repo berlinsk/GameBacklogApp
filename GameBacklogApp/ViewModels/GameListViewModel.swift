@@ -48,26 +48,29 @@ class GameListViewModel: ObservableObject {
         if reset {
             query.offset = 0
             games.removeAll()
+            isLoading = true
         }
         query.limit = page
-        isLoading = true
-        errorMessage = nil
 
         APIService.shared.fetchGames(query: query) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
-                self.isLoading = false
+
                 switch result {
                 case .success(let response):
-                    let fetched = response.games
                     if reset {
-                        self.games = fetched
+                        self.games = response.games
                     } else {
-                        self.games.append(contentsOf: fetched)
+                        self.games.append(contentsOf: response.games)
                     }
                     self.total = response.total
+
                 case .failure(let error):
                     self.errorMessage = error.localizedDescription
+                }
+
+                if reset {
+                    self.isLoading = false
                 }
             }
         }
