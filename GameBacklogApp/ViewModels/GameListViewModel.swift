@@ -82,14 +82,19 @@ class GameListViewModel: ObservableObject {
 
                 switch result {
                 case .success(let response):
+                    let context = CoreDataStack.shared.container.viewContext
+                    let fetchRequest: NSFetchRequest<DeletedGameEntity> = DeletedGameEntity.fetchRequest()
+                    let deletedIds = (try? context.fetch(fetchRequest))?.map { $0.id } ?? []
+                    let filteredGames = response.games.filter { !deletedIds.contains($0.id) }
                     if reset {
-                        self.games = response.games
-                        self.saveToCoreData(games: response.games, reset: true)
+                        self.games = filteredGames
+                        self.saveToCoreData(games: filteredGames, reset: true)
                     } else {
-                        self.games.append(contentsOf: response.games)
-                        self.saveToCoreData(games: response.games, reset: false)
+                        self.games.append(contentsOf: filteredGames)
+                        self.saveToCoreData(games: filteredGames, reset: false)
                     }
                     self.total = response.total
+                    self.errorMessage = nil
 
                 case .failure:
                     self.loadFromCoreData() // fallback to the cache
@@ -189,37 +194,71 @@ class GameListViewModel: ObservableObject {
         let req: NSFetchRequest<GameEntity> = GameEntity.fetchRequest()
         req.predicate = NSPredicate(format: "id == %@", game.id as CVarArg)
         if let entity = try? ctx.fetch(req).first {
-            ctx.delete(entity)
+            if isOnline {
+                ctx.delete(entity)
+            } else {
+                let deleted = DeletedGameEntity(context: ctx)
+                deleted.id = game.id
+            }
             CoreDataStack.save()
         }
     }
     
+    @MainActor
     private func syncUnsyncedGames() {
-        let context = CoreDataStack.shared.container.viewContext
-        let request: NSFetchRequest<GameEntity> = GameEntity.fetchRequest()
-        request.predicate = NSPredicate(format: "isSynced == NO")
+        syncDeletedGames {
+            let context = CoreDataStack.shared.container.viewContext
+            let request: NSFetchRequest<GameEntity> = GameEntity.fetchRequest()
+            request.predicate = NSPredicate(format: "isSynced == NO")
 
-        if let unsynced = try? context.fetch(request) {
-            for entity in unsynced {
-                let game = entity.toModel()
-                APIService.shared.createGame(game) { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let syncedGame):
-                            entity.update(from: syncedGame)
-                            entity.isSynced = true
-                            CoreDataStack.save()
-                            if let idx = self.games.firstIndex(where: { $0.id == syncedGame.id }) {
-                                self.games[idx] = syncedGame
-                            } else {
-                                self.games.append(syncedGame)
+            if let unsynced = try? context.fetch(request) {
+                for entity in unsynced {
+                    let game = entity.toModel()
+                    APIService.shared.createGame(game) { result in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let syncedGame):
+                                entity.update(from: syncedGame)
+                                entity.isSynced = true
+                                CoreDataStack.save()
+                                if let idx = self.games.firstIndex(where: { $0.id == syncedGame.id }) {
+                                    self.games[idx] = syncedGame
+                                } else {
+                                    self.games.append(syncedGame)
+                                }
+                            case .failure:
+                                break
                             }
-                        case .failure:
-                            break
                         }
                     }
                 }
             }
+        }
+    }
+    
+    @MainActor
+    private func syncDeletedGames(completion: @escaping () -> Void) {
+        let context = CoreDataStack.shared.container.viewContext
+        let request: NSFetchRequest<DeletedGameEntity> = DeletedGameEntity.fetchRequest()
+
+        guard let deleted = try? context.fetch(request), !deleted.isEmpty else {
+            completion(); return
+        }
+
+        let group = DispatchGroup()
+        for del in deleted {
+            group.enter()
+            APIService.shared.deleteGame(del.id) { result in
+                if case .success = result {
+                    context.delete(del)
+                }
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            CoreDataStack.save()
+            completion()
         }
     }
 }
