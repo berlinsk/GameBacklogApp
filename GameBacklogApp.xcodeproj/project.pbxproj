@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		C41C7D922E0361C20092337B /* EditGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7D912E0361C20092337B /* EditGameView.swift */; };
 		C41C7D942E038C770092337B /* GameDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7D932E038C770092337B /* GameDetailView.swift */; };
+		C41C7DD32E0A33850092337B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7DD22E0A33840092337B /* Theme.swift */; };
+		C41C7DE22E0B6C8F0092337B /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7DE12E0B6C8F0092337B /* Fonts.swift */; };
+		C41C7DE62E0B6ECE0092337B /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7DE52E0B6ECE0092337B /* ThemeButtonStyle.swift */; };
+		C41C7DE82E0B6F090092337B /* ThemeModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7DE72E0B6F090092337B /* ThemeModifiers.swift */; };
+		C41C7DEC2E0B6F560092337B /* View+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41C7DEB2E0B6F560092337B /* View+Theme.swift */; };
 		C4F1A8622DF5969C00DA6B71 /* GameBacklogApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */; };
 		C4F1A8662DF596A100DA6B71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4F1A8652DF596A100DA6B71 /* Assets.xcassets */; };
 		C4F1A8692DF596A100DA6B71 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4F1A8682DF596A100DA6B71 /* Preview Assets.xcassets */; };
@@ -26,6 +31,11 @@
 /* Begin PBXFileReference section */
 		C41C7D912E0361C20092337B /* EditGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGameView.swift; sourceTree = "<group>"; };
 		C41C7D932E038C770092337B /* GameDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailView.swift; sourceTree = "<group>"; };
+		C41C7DD22E0A33840092337B /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		C41C7DE12E0B6C8F0092337B /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		C41C7DE52E0B6ECE0092337B /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
+		C41C7DE72E0B6F090092337B /* ThemeModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeModifiers.swift; sourceTree = "<group>"; };
+		C41C7DEB2E0B6F560092337B /* View+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Theme.swift"; sourceTree = "<group>"; };
 		C4F1A85E2DF5969C00DA6B71 /* GameBacklogApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameBacklogApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBacklogApp.swift; sourceTree = "<group>"; };
 		C4F1A8652DF596A100DA6B71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -44,6 +54,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C41C7D972E08C18E0092337B /* CoreData */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreData; sourceTree = "<group>"; };
+		C41C7DD62E0B687B0092337B /* Fonts */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Fonts; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +68,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C41C7DEA2E0B6F3B0092337B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C41C7DEB2E0B6F560092337B /* View+Theme.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C4F1A8552DF5969C00DA6B71 = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +96,7 @@
 		C4F1A8602DF5969C00DA6B71 /* GameBacklogApp */ = {
 			isa = PBXGroup;
 			children = (
+				C41C7DD62E0B687B0092337B /* Fonts */,
 				C41C7D972E08C18E0092337B /* CoreData */,
 				C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */,
 				C4F1A8732DF596FA00DA6B71 /* Helpers */,
@@ -140,6 +160,11 @@
 		C4F1A8732DF596FA00DA6B71 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C41C7DD22E0A33840092337B /* Theme.swift */,
+				C41C7DE12E0B6C8F0092337B /* Fonts.swift */,
+				C41C7DE52E0B6ECE0092337B /* ThemeButtonStyle.swift */,
+				C41C7DE72E0B6F090092337B /* ThemeModifiers.swift */,
+				C41C7DEA2E0B6F3B0092337B /* Extensions */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -161,6 +186,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				C41C7D972E08C18E0092337B /* CoreData */,
+				C41C7DD62E0B687B0092337B /* Fonts */,
 			);
 			name = GameBacklogApp;
 			productName = GameBacklogApp;
@@ -219,15 +245,20 @@
 			files = (
 				C4F1A87B2DF599CD00DA6B71 /* GameListViewModel.swift in Sources */,
 				C41C7D922E0361C20092337B /* EditGameView.swift in Sources */,
+				C41C7DEC2E0B6F560092337B /* View+Theme.swift in Sources */,
 				C4F1A8812DF5D37700DA6B71 /* LoginView.swift in Sources */,
 				C41C7D942E038C770092337B /* GameDetailView.swift in Sources */,
+				C41C7DD32E0A33850092337B /* Theme.swift in Sources */,
 				C4F1A8622DF5969C00DA6B71 /* GameBacklogApp.swift in Sources */,
 				C4F1A8852DF5D4A100DA6B71 /* AppState.swift in Sources */,
 				C4F1A87D2DF599DA00DA6B71 /* GameListView.swift in Sources */,
+				C41C7DE62E0B6ECE0092337B /* ThemeButtonStyle.swift in Sources */,
 				C4F1A8832DF5D38900DA6B71 /* LoginViewModel.swift in Sources */,
 				C4F1A8772DF597FB00DA6B71 /* GameStatus.swift in Sources */,
 				C4F1A8792DF5981D00DA6B71 /* APIService.swift in Sources */,
+				C41C7DE82E0B6F090092337B /* ThemeModifiers.swift in Sources */,
 				C4F1A8872DF5D4D400DA6B71 /* User.swift in Sources */,
+				C41C7DE22E0B6C8F0092337B /* Fonts.swift in Sources */,
 				C4F1A8752DF597ED00DA6B71 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
