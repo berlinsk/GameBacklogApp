@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -42,6 +42,10 @@
 		C4F1A8862DF5D4D400DA6B71 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C41C7D972E08C18E0092337B /* CoreData */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreData; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		C4F1A85B2DF5969C00DA6B71 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -73,6 +77,7 @@
 		C4F1A8602DF5969C00DA6B71 /* GameBacklogApp */ = {
 			isa = PBXGroup;
 			children = (
+				C41C7D972E08C18E0092337B /* CoreData */,
 				C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */,
 				C4F1A8732DF596FA00DA6B71 /* Helpers */,
 				C4F1A8722DF596F300DA6B71 /* ViewModels */,
@@ -153,6 +158,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C41C7D972E08C18E0092337B /* CoreData */,
 			);
 			name = GameBacklogApp;
 			productName = GameBacklogApp;
