@@ -167,6 +167,11 @@ class GameListViewModel: ObservableObject {
         }
 
         for game in games {
+            let fetch: NSFetchRequest<GameEntity> = GameEntity.fetchRequest()
+            fetch.predicate = NSPredicate(format: "id == %@", game.id as CVarArg)
+            if let existing = try? context.fetch(fetch), let first = existing.first {
+                context.delete(first)
+            }
             let entity = GameEntity(context: context)
             entity.update(from: game)
             entity.isSynced = markSynced
@@ -180,8 +185,12 @@ class GameListViewModel: ObservableObject {
         let request: NSFetchRequest<GameEntity> = GameEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
 
+        let deletedRequest: NSFetchRequest<DeletedGameEntity> = DeletedGameEntity.fetchRequest()
+        let deletedIds = (try? ctx.fetch(deletedRequest))?.compactMap { $0.id } ?? []
+
         if let entities = try? ctx.fetch(request) {
-            self.games = entities.map { $0.toModel() }
+            let filtered = entities.filter { !deletedIds.contains($0.id) }
+            self.games = filtered.map { $0.toModel() }
             self.total = games.count
         }
     }
@@ -199,6 +208,7 @@ class GameListViewModel: ObservableObject {
             } else {
                 let deleted = DeletedGameEntity(context: ctx)
                 deleted.id = game.id
+                ctx.delete(entity)
             }
             CoreDataStack.save()
         }
