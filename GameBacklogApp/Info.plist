@@ -4,8 +4,8 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Orbitron-VariableFont_wght.ttf</string>
 		<string>VT323-Regular.ttf</string>
+		<string>Orbitron-VariableFont_wght.ttf</string>
 		<string>CozetteVector.ttf</string>
 		<string>slkscr.ttf</string>
 		<string>Pixel Emulator.otf</string>

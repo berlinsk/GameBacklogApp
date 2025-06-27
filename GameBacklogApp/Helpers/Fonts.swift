@@ -9,11 +9,11 @@ import SwiftUI
 
 enum Fonts {
     static func orbitron(size: CGFloat) -> Font {
-        .custom("Orbitron", size: size)
+        .custom("Orbitron-Regular", size: size)
     }
 
     static func vt323(size: CGFloat) -> Font {
-        .custom("VT323", size: size)
+        .custom("VT323-Regular", size: size)
     }
 
     static func cozette(size: CGFloat) -> Font {
@@ -25,10 +25,10 @@ enum Fonts {
     }
 
     static func pixelEmulator(size: CGFloat) -> Font {
-        .custom("Pixel Emulator", size: size)
+        .custom("PixelEmulator", size: size)
     }
 
     static func shareMono(size: CGFloat) -> Font {
-        .custom("Share Tech Mono", size: size)
+        .custom("ShareTechMono-Regular", size: size)
     }
 }
