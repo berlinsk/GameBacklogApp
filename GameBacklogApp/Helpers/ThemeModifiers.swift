@@ -10,6 +10,7 @@ import SwiftUI
 struct NeonCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(Theme.Colors.card)
             .cornerRadius(Theme.Metrics.cardCornerRadius)
