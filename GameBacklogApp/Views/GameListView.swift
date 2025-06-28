@@ -12,10 +12,12 @@ struct GameListView: View {
     @EnvironmentObject var appState: AppState
     @State private var detailGame: Game?
     @State private var editingGame: Game?
+    @State private var isSortMenuPresented = false
 
     @ViewBuilder
     var content: some View {
         ZStack {
+            Theme.Colors.background.ignoresSafeArea()
             List {
                 ForEach(viewModel.games) { game in
                     HStack(alignment: .top, spacing: 12) {
@@ -42,14 +44,25 @@ struct GameListView: View {
                         }
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(game.title).font(.headline)
-                            Text(game.platform).font(.subheadline)
+                            Text(game.title)
+                                .font(Theme.Fonts.title(size: 18))
+                                .foregroundColor(Theme.Colors.neonText)
+
+                            Text(game.platform)
+                                .font(Theme.Fonts.subtitle(size: 14))
+                                .foregroundColor(Theme.Colors.softText)
+
                             Text("Genres: \(game.genres.joined(separator: ", "))")
-                                .font(.caption)
-                            Text("Status: \(game.status.rawValue.capitalized), Rating: \(game.rating)/10").font(.caption)
+                                .font(Theme.Fonts.body(size: 14))
+                                .foregroundColor(Theme.Colors.softText)
+
+                            Text("Status: \(game.status.rawValue.capitalized), Rating: \(game.rating)/10")
+                                .font(Theme.Fonts.caption(size: 13))
+                                .foregroundColor(Theme.Colors.softText)
                         }
                     }
                     .padding(.vertical, 4)
+                    .neonCard()
                     .contentShape(Rectangle())
                     .onTapGesture { detailGame = game }
                     .swipeActions(edge: .trailing) {
@@ -67,6 +80,8 @@ struct GameListView: View {
                 }
                 .onDelete(perform: viewModel.delete)
             }
+            .listStyle(.plain)
+            .background(Theme.Colors.background)
             .animation(nil, value: viewModel.games)   // pagination without animation
 
             // spinner
@@ -85,93 +100,92 @@ struct GameListView: View {
         }
     }
 
-
     var body: some View {
         NavigationStack {
-            content
-                .navigationTitle("My games(\(viewModel.games.count)/\(viewModel.total))")
-                .onAppear { viewModel.loadGames() }
-                .refreshable { viewModel.loadGames() }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Logout") {
-                            appState.logout()
-                        }
+            VStack(spacing: 12) {
+                HStack {
+                    Button {
+                        editingGame = Game(
+                            id: UUID(), title: "", platform: "", coverURL: nil,
+                            status: .backlog, rating: 0, notes: "", genres: [],
+                            createdAt: ISO8601DateFormatter().string(from: Date())
+                        )
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.title2)
+                            .foregroundColor(Theme.Colors.accent)
                     }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            editingGame = Game(
-                                id: UUID(), title: "", platform: "", coverURL: nil,
-                                status: .backlog, rating: 0, notes: "", genres: [],
-                                createdAt: ISO8601DateFormatter().string(from: Date())
+
+                    Spacer()
+
+                    Button("Logout") {
+                        appState.logout()
+                    }
+                    .font(Theme.Fonts.body())
+                    .foregroundColor(Theme.Colors.accent)
+
+                    Button(action: {
+                        isSortMenuPresented = true
+                    }) {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.title2)
+                            .foregroundColor(Theme.Colors.accent)
+                            .padding(8)
+                            .background(
+                                RoundedRectangle(cornerRadius: Theme.Metrics.cardCornerRadius)
+                                    .stroke(Theme.Colors.accent, lineWidth: 1.5)
                             )
-                        }) {
-                            Image(systemName: "plus")
+                    }
+                    .sheet(isPresented: $isSortMenuPresented) {
+                        SortAndFilterMenu(isPresented: $isSortMenuPresented, viewModel: viewModel)
+                    }
+                }
+                .padding(.horizontal)
+
+                Text("My games (\(viewModel.games.count)/\(viewModel.total))")
+                    .retroTitle()
+
+                TextField("Search games", text: $viewModel.searchText)
+                    .font(Theme.Fonts.body())
+                    .padding(8)
+                    .background(Theme.Colors.card)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Theme.Colors.accent.opacity(0.3), lineWidth: 1)
+                    )
+                    .cornerRadius(8)
+                    .padding(.horizontal)
+
+                content
+            }
+            .background(Theme.Colors.background.ignoresSafeArea())
+            .onAppear { viewModel.loadGames() }
+            .refreshable { viewModel.loadGames() }
+            .sheet(item: $editingGame) { game in
+                NavigationStack {
+                    EditGameView(game: game) { edited in
+                        if viewModel.games.contains(where: { $0.id == edited.id }) {
+                            viewModel.save(game: edited)
+                        } else {
+                            viewModel.add(game: edited)
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        sortAndFilterMenu
-                    }
                 }
-                .sheet(item: $editingGame) { game in
-                    NavigationStack {
-                        EditGameView(game: game) { edited in
-                            if viewModel.games.contains(where: { $0.id == edited.id }) {
-                                viewModel.save(game: edited)
-                            } else {
-                                viewModel.add(game: edited)
-                            }
-                        }
-                    }
+            }
+            .navigationDestination(item: $detailGame) { game in
+                if let idx = viewModel.games.firstIndex(where: { $0.id == game.id }) {
+                    GameDetailView(
+                        game: $viewModel.games[idx],
+                        onEdit: { toEdit in editingGame = toEdit }
+                    )
+                } else {
+                    GameDetailView(
+                        game: .constant(game),
+                        onEdit: { toEdit in editingGame = toEdit }
+                    )
                 }
-                .navigationDestination(item: $detailGame) { game in
-                    if let idx = viewModel.games.firstIndex(where: { $0.id == game.id }) {
-                        GameDetailView(
-                            game: $viewModel.games[idx],
-                            onEdit: { toEdit in editingGame = toEdit }
-                        )
-                    } else {
-                        GameDetailView(
-                            game: .constant(game),
-                            onEdit: { toEdit in editingGame = toEdit }
-                        )
-                    }
-                }
+            }
         }
         .environmentObject(appState)
-        .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search games")
-    }
-    
-    private var sortAndFilterMenu: some View {
-        Menu {
-            Picker("Sort by", selection: $viewModel.query.sortBy) {
-                Text("Created").tag("createdAt")
-                Text("Title").tag("title")
-                Text("Platform").tag("platform")
-                Text("Rating").tag("rating")
-            }
-
-            Picker("Order", selection: $viewModel.query.order) {
-                Text("Desc").tag("desc")
-                Text("Asc").tag("asc")
-            }
-
-            Picker("Status", selection: Binding(
-                get: { viewModel.query.status ?? .backlog },
-                set: { new in
-                    viewModel.query.status = (new == .backlog ? nil : new)
-                    viewModel.loadGames()
-                })) {
-                Text("All").tag(GameStatus.backlog)
-                ForEach(GameStatus.allCases) { s in
-                    if s != .backlog {
-                        Text(s.rawValue.capitalized).tag(s)
-                    }
-                }
-            }
-
-        } label: {
-            Image(systemName: "arrow.up.arrow.down.square")
-        }
     }
 }
