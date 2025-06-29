@@ -36,8 +36,8 @@ iOS app for managing a game backlog with offline support
 ### Offline Mode
 <img src="GameBacklogApp/Docs/ReadmeScreens/OfflineMode.PNG" width="400"/>
 
-### UML diagram
-<img src="GameBacklogApp/Docs/ReadmeScreens/UML.PNG" width="400"/>
+### App architecture
+![UML](GameBacklogApp/Docs/ReadmeScreens/UML.png)
 
 ## Requirements
 
