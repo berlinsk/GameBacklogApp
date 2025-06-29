@@ -15,26 +15,7 @@ struct GameDetailView: View {
         ScrollView {
             VStack(spacing: 16) {
 
-                if let url = URL(string: game.coverURL ?? "") {
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .success(let img):
-                            img.resizable()
-                               .scaledToFit()
-                               .cornerRadius(12)
-                               .shadow(color: Theme.Colors.accent.opacity(0.5), radius: 6, x: 0, y: 3)
-                        case .failure:
-                            Color.gray.frame(height: 180)
-                                .cornerRadius(12)
-                        default:
-                            ProgressView()
-                                .frame(height: 180)
-                        }
-                    }
-                } else {
-                    Color.gray.frame(height: 180)
-                        .cornerRadius(12)
-                }
+                GameCoverView(coverURL: game.coverURL, size: UIScreen.main.bounds.width, isFullWidth: true)
 
                 Text(game.title)
                     .retroTitle()

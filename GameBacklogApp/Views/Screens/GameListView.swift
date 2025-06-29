@@ -21,27 +21,8 @@ struct GameListView: View {
             List {
                 ForEach(viewModel.games) { game in
                     HStack(alignment: .top, spacing: 12) {
-                        if let urlString = game.coverURL,
-                           let url = URL(string: urlString) {
-                            AsyncImage(url: url) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView().frame(width: 60, height: 60)
-                                case .success(let image):
-                                    image.resizable()
-                                         .scaledToFill()
-                                         .frame(width: 60, height: 60)
-                                         .clipped()
-                                         .cornerRadius(8)
-                                default:
-                                    Color.gray.frame(width: 60, height: 60)
-                                             .cornerRadius(8)
-                                }
-                            }
-                        } else {
-                            Color.gray.frame(width: 60, height: 60)
-                                      .cornerRadius(8)
-                        }
+                        
+                        GameCoverView(coverURL: game.coverURL, size: 60)
 
                         VStack(alignment: .leading, spacing: 4) {
                             Text(game.title)

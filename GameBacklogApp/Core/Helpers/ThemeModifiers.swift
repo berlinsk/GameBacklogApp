@@ -11,7 +11,8 @@ struct NeonCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            .padding(.vertical, 4)
+            .padding(.horizontal, 8)
             .background(Theme.Colors.card)
             .cornerRadius(Theme.Metrics.cardCornerRadius)
             .shadow(color: Theme.Colors.accent.opacity(0.3), radius: 4, x: 0, y: 2)
