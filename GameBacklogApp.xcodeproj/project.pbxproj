@@ -69,6 +69,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C40119812E10DC48002AABBF /* Docs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Docs; sourceTree = "<group>"; };
 		C41C7D972E08C18E0092337B /* CoreData */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CoreData; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -164,6 +165,7 @@
 			children = (
 				C40119622E0F0038002AABBF /* Info.plist */,
 				C4F1A8612DF5969C00DA6B71 /* GameBacklogApp.swift */,
+				C40119812E10DC48002AABBF /* Docs */,
 				C401197E2E10D7D9002AABBF /* Assets */,
 				C401197D2E10D78B002AABBF /* Core */,
 				C4F1A8722DF596F300DA6B71 /* ViewModels */,
@@ -247,6 +249,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				C40119812E10DC48002AABBF /* Docs */,
 				C41C7D972E08C18E0092337B /* CoreData */,
 			);
 			name = GameBacklogApp;
