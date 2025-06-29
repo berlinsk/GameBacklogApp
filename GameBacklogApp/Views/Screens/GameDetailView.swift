@@ -84,17 +84,20 @@ struct GameDetailView: View {
                 }
                 .neonCard()
 
-                Button("Edit") {
-                    onEdit(game)
-                }
-                .buttonStyle(NeonButtonStyle())
-                .padding(.top, 20)
-
                 Spacer()
             }
             .padding()
         }
         .background(Theme.Colors.background.ignoresSafeArea())
         .navigationTitle("Details")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { onEdit(game) }) {
+                    Text("Edit")
+                        .font(Theme.Fonts.body())
+                        .foregroundColor(Theme.Colors.accent)
+                }
+            }
+        }
     }
 }
